@@ -1,0 +1,104 @@
+data:
+  tickers:
+    - AAPL
+    - MSFT
+    - GOOGL
+    - JPM
+    - GS
+    - SPY
+    - QQQ
+  start_date: "2010-01-01"
+  end_date: "2024-12-31"
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  external_dir: "data/external"
+  train_ratio: 0.70
+  val_ratio: 0.15
+
+features:
+  ma_windows: [5, 10, 20, 50, 200]
+  ema_spans: [12, 26]
+  rsi_period: 14
+  atr_period: 14
+  bb_window: 20
+  bb_std: 2
+  vol_windows: [5, 10, 20, 60]
+  lag_windows: [1, 2, 3, 5, 10]
+  return_windows: [1, 2, 5, 10, 20]
+  volume_ma_window: 20
+  stoch_period: 14
+  stoch_smooth: 3
+
+target:
+  column: "Target_Return"
+  direction_column: "Target_Direction"
+  horizon: 1
+
+models:
+  random_forest:
+    n_estimators: 500
+    max_depth: 8
+    min_samples_split: 20
+    min_samples_leaf: 10
+    max_features: "sqrt"
+    n_jobs: -1
+    random_state: 42
+
+  lightgbm:
+    objective: "regression"
+    metric: "rmse"
+    verbosity: -1
+    boosting_type: "gbdt"
+    num_leaves: 63
+    learning_rate: 0.05
+    feature_fraction: 0.8
+    bagging_fraction: 0.8
+    bagging_freq: 5
+    min_child_samples: 20
+    lambda_l1: 0.1
+    lambda_l2: 0.1
+    n_estimators: 1000
+    early_stopping_rounds: 50
+    random_state: 42
+
+  lstm:
+    sequence_length: 30
+    hidden_size: 128
+    num_layers: 2
+    dropout: 0.3
+    batch_size: 64
+    epochs: 100
+    learning_rate: 0.001
+    weight_decay: 0.00001
+    patience: 20
+    gradient_clip: 1.0
+
+  optuna:
+    n_trials: 50
+    direction: "minimize"
+    timeout: 3600
+
+training:
+  cv_folds: 5
+  model_dir: "models"
+  use_optuna: true
+
+evaluation:
+  transaction_cost: 0.001
+  risk_free_rate: 0.05
+  trading_days: 252
+
+monte_carlo:
+  n_simulations: 1000
+  n_trading_days: 252
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  reload: false
+  log_level: "info"
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+  log_dir: "logs"
