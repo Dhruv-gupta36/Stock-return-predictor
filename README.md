@@ -1,9 +1,5 @@
 # Stock Return Predictor
 
-[![CI](https://github.com/yourusername/stock-return-predictor/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/stock-return-predictor/actions)
-[![Python](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.111-green.svg)](https://fastapi.tiangolo.com/)
-
 ML-powered next-day stock return prediction using LightGBM, LSTM, Monte Carlo simulation, and SHAP explainability. Deployed via FastAPI and Docker.
 
 ---
